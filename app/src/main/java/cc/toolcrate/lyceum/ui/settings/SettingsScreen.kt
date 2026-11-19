@@ -53,6 +53,16 @@ fun SettingsScreen(
             SectionLabel("Reminder")
             ReminderSection(settings) { on, time -> viewModel.setReminder(on, time) }
             Hairline()
+            Gap(12)
+            SectionLabel("Privacy")
+            LockSection(
+                settings,
+                onEnable = viewModel::enableLock,
+                onDisable = viewModel::disableLock,
+                onBiometric = viewModel::setBiometric,
+                launch = viewModel::launch,
+            )
+            Hairline()
             SettingRow("About", "Principles, fonts and the source of the quotations.", onClick = onOpenAbout)
             Gap(40)
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cc.toolcrate.lyceum.data.settings.Settings
 import cc.toolcrate.lyceum.data.settings.SettingsStore
 import cc.toolcrate.lyceum.reminder.ReminderScheduler
+import cc.toolcrate.lyceum.security.AppLock
 import cc.toolcrate.lyceum.ui.theme.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val store: SettingsStore,
     private val reminders: ReminderScheduler,
+    private val lock: AppLock,
 ) : ViewModel() {
     val settings: StateFlow<Settings> = store.settings
         .stateIn(viewModelScope, SharingStarted.Eagerly, Settings())
@@ -28,4 +30,19 @@ class SettingsViewModel @Inject constructor(
         store.setReminder(enabled, time)
         reminders.reschedule()
     }
+
+    fun enableLock(pin: String, biometric: Boolean) = viewModelScope.launch { lock.enable(pin, biometric) }
+
+    suspend fun disableLock(pin: String): Boolean {
+        if (!lock.checkPin(pin)) return false
+        lock.disable()
+        return true
+    }
+
+    fun setBiometric(on: Boolean) = viewModelScope.launch { store.setLock(true, on) }
+
+    fun launch(block: suspend () -> Unit) { viewModelScope.launch { block() } }
+
+    /** The next trip out of the app (a file picker, Google) shouldn't lock it on return. */
+    fun expectReturn() = lock.expectReturn()
 }
