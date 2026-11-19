@@ -57,4 +57,5 @@ cc.toolcrate.lyceum
 - Builds fetch from Google's Maven Central mirror first (see `settings.gradle.kts`); Robolectric uses it too.
 - Commit after each milestone with a plain, descriptive message. Never put model names or identifiers in
   commits, code or docs.
-- `local.properties` (SDK path) and signing files are never committed.
+- `local.properties` (SDK path) and release signing files are never committed. `app/debug.keystore` is a
+  deliberate, debug-only exception so the Drive OAuth client sees a stable SHA-1 (docs/drive-setup.md).
