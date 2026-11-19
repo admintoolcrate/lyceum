@@ -78,6 +78,11 @@ fun SettingsScreen(
             SectionLabel("Your pages")
             DataSection(onBeforePicker = viewModel::expectReturn, onExport = viewModel::export, onImport = viewModel::import)
             Hairline()
+            Gap(12)
+            SectionLabel("Backup to Google Drive · optional")
+            Gap(8)
+            BackupSection()
+            Hairline()
             SettingRow("About", "Principles, fonts and the source of the quotations.", onClick = onOpenAbout)
             Gap(40)
         }

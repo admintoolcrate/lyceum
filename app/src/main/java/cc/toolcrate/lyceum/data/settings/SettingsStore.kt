@@ -26,6 +26,8 @@ data class Settings(
     val biometricEnabled: Boolean = false,
     val backupMode: BackupMode = BackupMode.Off,
     val lastBackupAt: Long = 0,
+    /** Why the last automatic backup didn't happen, if it didn't. */
+    val backupNote: String? = null,
     val stagiraLinkEnabled: Boolean = true,
 )
 
@@ -41,6 +43,7 @@ class SettingsStore @Inject constructor(private val store: DataStore<Preferences
             biometricEnabled = p[BIOMETRIC_ON] ?: false,
             backupMode = p[BACKUP_MODE]?.let { runCatching { BackupMode.valueOf(it) }.getOrNull() } ?: BackupMode.Off,
             lastBackupAt = p[LAST_BACKUP] ?: 0,
+            backupNote = p[BACKUP_NOTE],
             stagiraLinkEnabled = p[STAGIRA_ON] ?: true,
         )
     }
@@ -63,6 +66,8 @@ class SettingsStore @Inject constructor(private val store: DataStore<Preferences
 
     suspend fun setLastBackup(at: Long) = store.edit { it[LAST_BACKUP] = at }
 
+    suspend fun setBackupNote(note: String?) = store.edit { if (note == null) it.remove(BACKUP_NOTE) else it[BACKUP_NOTE] = note }
+
     suspend fun setStagiraLink(enabled: Boolean) = store.edit { it[STAGIRA_ON] = enabled }
 
     // The PIN's salted hash and the lockout state live here too, read only by security/.
@@ -84,6 +89,7 @@ class SettingsStore @Inject constructor(private val store: DataStore<Preferences
         val BIOMETRIC_ON = booleanPreferencesKey("biometric_on")
         val BACKUP_MODE = stringPreferencesKey("backup_mode")
         val LAST_BACKUP = longPreferencesKey("last_backup")
+        val BACKUP_NOTE = stringPreferencesKey("backup_note")
         val STAGIRA_ON = booleanPreferencesKey("stagira_on")
         val PIN_RECORD = stringPreferencesKey("pin_record")
         val PIN_FAILS = intPreferencesKey("pin_fails")

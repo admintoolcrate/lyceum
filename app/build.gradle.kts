@@ -20,6 +20,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // A fixed debug key, so every debug build has the same SHA-1 to register with Google for
+        // the optional Drive backup (see docs/drive-setup.md). Debug only; never use it for a release.
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
