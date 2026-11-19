@@ -48,7 +48,7 @@ data class EditorState(
 
 @HiltViewModel
 class EditorViewModel @Inject constructor(
-    savedState: SavedStateHandle,
+    private val savedState: SavedStateHandle,
     private val entries: EntryRepository,
     private val prompts: PromptRepository,
     private val pendingGoal: PendingGoal,
@@ -70,12 +70,16 @@ class EditorViewModel @Inject constructor(
             val existing = entries.get(date)
             val prompt = existing?.prompt ?: prompts.observeToday(date).first()
             _state.update {
-                if (existing == null) it.copy(loaded = true, prompt = prompt)
+                val loaded = if (existing == null) it.copy(loaded = true, prompt = prompt)
                 else it.copy(
                     loaded = true, existing = true, prompt = prompt, body = existing.body, mood = existing.mood,
                     learned = existing.learned.orEmpty(), tags = existing.tags, goal = existing.goal,
                 )
+                restoreDraft(loaded)
             }
+            // From here on, unsaved changes are kept in the saved state, so a page half-written when
+            // Android stops the app in the background is still there when it comes back.
+            _state.collect { keepDraft(it) }
         }
         // A goal handed over by Stagira opens on today's page, ready to keep or remove.
         if (date == today) {
@@ -88,6 +92,43 @@ class EditorViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun keepDraft(s: EditorState) {
+        if (!s.loaded) return
+        if (!s.dirty) {
+            DRAFT_KEYS.forEach { savedState.remove<Any>(it) }
+            return
+        }
+        savedState[K_BODY] = s.body
+        savedState[K_LEARNED] = s.learned
+        savedState[K_MOOD] = s.mood?.value ?: 0
+        savedState[K_TAGS] = ArrayList(s.tags)
+        savedState[K_GOAL_ID] = s.goal?.id
+        savedState[K_GOAL_TITLE] = s.goal?.title
+    }
+
+    private fun restoreDraft(s: EditorState): EditorState {
+        val body = savedState.get<String>(K_BODY) ?: return s
+        val goalId = savedState.get<String>(K_GOAL_ID)
+        return s.copy(
+            body = body,
+            learned = savedState.get<String>(K_LEARNED).orEmpty(),
+            mood = Mood.of(savedState.get<Int>(K_MOOD)),
+            tags = savedState.get<ArrayList<String>>(K_TAGS).orEmpty(),
+            goal = goalId?.let { GoalRef(it, savedState.get<String>(K_GOAL_TITLE).orEmpty()) },
+            dirty = true,
+        )
+    }
+
+    private companion object {
+        const val K_BODY = "draft_body"
+        const val K_LEARNED = "draft_learned"
+        const val K_MOOD = "draft_mood"
+        const val K_TAGS = "draft_tags"
+        const val K_GOAL_ID = "draft_goal_id"
+        const val K_GOAL_TITLE = "draft_goal_title"
+        val DRAFT_KEYS = listOf(K_BODY, K_LEARNED, K_MOOD, K_TAGS, K_GOAL_ID, K_GOAL_TITLE)
     }
 
     fun setBody(text: String) = _state.update { it.copy(body = text, dirty = true) }

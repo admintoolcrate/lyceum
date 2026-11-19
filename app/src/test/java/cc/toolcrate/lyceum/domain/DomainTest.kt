@@ -59,6 +59,14 @@ class SearchQueryTest {
     }
 }
 
+class LikePrefixTest {
+    @Test
+    fun escapesLikeWildcards() {
+        assertEquals("100\\%", SearchQuery.likePrefix(" #100% "))
+        assertEquals("a\\_b", SearchQuery.likePrefix("a_b"))
+    }
+}
+
 class MoodTest {
     @Test
     fun roundTripsByValue() {

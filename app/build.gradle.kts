@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +9,25 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+/** Upload-key settings from keystore.properties, else from RELEASE_* environment variables (CI). */
+val releaseSigning: Map<String, String>?
+    get() {
+        val file = rootProject.file("keystore.properties")
+        if (file.exists()) {
+            val p = Properties().apply { file.inputStream().use { load(it) } }
+            return listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+                .associateWith { p.getProperty(it) ?: error("keystore.properties is missing $it") }
+        }
+        // Trimmed: values pasted into GitHub secrets easily pick up a stray space or line break.
+        val env = mapOf(
+            "storeFile" to System.getenv("RELEASE_STORE_FILE")?.trim(),
+            "storePassword" to System.getenv("RELEASE_STORE_PASSWORD")?.trim(),
+            "keyAlias" to System.getenv("RELEASE_KEY_ALIAS")?.trim(),
+            "keyPassword" to System.getenv("RELEASE_KEY_PASSWORD")?.trim(),
+        )
+        return if (env.values.all { !it.isNullOrEmpty() }) env.mapValues { it.value!! } else null
+    }
+
 android {
     namespace = "cc.toolcrate.lyceum"
     compileSdk = 36
@@ -15,8 +36,10 @@ android {
         applicationId = "cc.toolcrate.lyceum"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1"
+        // CI builds number themselves from the run (run 57 is version 1057), so every upload to
+        // Play has a new, higher code. Builds made elsewhere use the fixed fallback.
+        versionCode = System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull()?.let { 1000 + it } ?: 1
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,10 +52,21 @@ android {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
         }
+        // Your upload key, from keystore.properties (never committed) or, in CI, from environment
+        // variables. Without either, release builds are unsigned. See docs/play-store/RELEASE.md.
+        releaseSigning?.let { s ->
+            create("release") {
+                storeFile = file(s.getValue("storeFile"))
+                storePassword = s.getValue("storePassword")
+                keyAlias = s.getValue("keyAlias")
+                keyPassword = s.getValue("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
+            signingConfigs.findByName("release")?.let { signingConfig = it }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -67,6 +101,11 @@ kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
+}
+
+// Play Store graphics are only drawn when asked for: ./gradlew testDebugUnitTest -Pstore=true
+tasks.withType<Test>().configureEach {
+    if (providers.gradleProperty("store").getOrElse("false") != "true") exclude("**/store/**")
 }
 
 ksp {

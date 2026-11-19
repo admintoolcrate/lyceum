@@ -28,15 +28,16 @@ interface EntryDao {
     @Transaction
     @Query(
         """
-        SELECT entries.* FROM entries
-        JOIN entries_fts ON entries.id = entries_fts.rowid
-        WHERE entries_fts MATCH :match
-          AND (:tag IS NULL OR entries.id IN (
+        SELECT * FROM entries
+        WHERE (id IN (SELECT rowid FROM entries_fts WHERE entries_fts MATCH :match)
+               OR id IN (SELECT entryId FROM entry_tags JOIN tags ON tags.id = entry_tags.tagId
+                         WHERE tags.name LIKE :tagPrefix || '%' ESCAPE '\'))
+          AND (:tag IS NULL OR id IN (
                 SELECT entryId FROM entry_tags JOIN tags ON tags.id = entry_tags.tagId WHERE tags.name = :tag))
-        ORDER BY entries.date DESC
+        ORDER BY date DESC
         """
     )
-    fun search(match: String, tag: String?): Flow<List<EntryWithTags>>
+    fun search(match: String, tagPrefix: String, tag: String?): Flow<List<EntryWithTags>>
 
     @Transaction
     @Query(

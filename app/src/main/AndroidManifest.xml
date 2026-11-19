@@ -8,6 +8,8 @@
     <!-- The evening reminder: asked for only when the user turns it on. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- WorkManager asks for this, but Lyceum's reminder and backup never run as foreground work. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove" />
 
     <!-- Lets Lyceum see whether Stagira can pick or show a goal (docs/stagira-intent.md). -->
     <queries>

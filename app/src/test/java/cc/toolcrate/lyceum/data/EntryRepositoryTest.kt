@@ -130,4 +130,23 @@ class EntryRepositoryTest : DbTest() {
         assertEquals(222, stored.updatedAt)
         assertEquals(listOf("imported"), stored.tags)
     }
+
+    @Test
+    fun searchAlsoFindsPagesByTheStartOfATagName() = runTest {
+        repo.save(page(date = day, body = "Said no to the extra project.", tags = listOf("work")))
+        repo.save(page(date = day.plusDays(1), body = "Quiet day.", tags = listOf("workshop")))
+        repo.save(page(date = day.plusDays(2), body = "Walked to work.", tags = listOf("walk")))
+        repo.save(page(date = day.plusDays(3), body = "Nothing here."))
+
+        assertEquals(listOf(day.plusDays(2), day.plusDays(1), day), repo.search("work", null).first().map { it.date })
+        // Narrowed to the exact tag "work", "workshop" and "walk" drop out.
+        assertEquals(listOf(day), repo.search("#work", "work").first().map { it.date })
+    }
+
+    @Test
+    fun tagSearchTreatsWildcardsAsPlainText() = runTest {
+        repo.save(page(date = day, body = "A", tags = listOf("100%")))
+        repo.save(page(date = day.plusDays(1), body = "B", tags = listOf("1000")))
+        assertEquals(listOf(day), repo.search("100%", null).first().map { it.date })
+    }
 }

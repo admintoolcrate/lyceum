@@ -13,4 +13,8 @@ object SearchQuery {
         if (words.isEmpty()) return null
         return words.joinToString(" ") { "$it*" }
     }
+
+    /** What the user typed, made safe for `LIKE prefix || '%' ESCAPE '\'`, for matching tag names. */
+    fun likePrefix(input: String): String =
+        input.trim().trimStart('#').replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 }

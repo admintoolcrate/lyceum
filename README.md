@@ -38,4 +38,5 @@ Requires JDK 17+ and the Android SDK (platform 36).
 - `CLAUDE.md`: project conventions.
 - `docs/drive-setup.md`: registering the Google OAuth client for the optional Drive backup.
 - `docs/stagira-intent.md`: the intent contract with Stagira.
+- `docs/play-store/RELEASE.md`: getting onto Google Play, from upload key to internal testing.
 - `third_party/README.md`: bundled fonts and the source of the quotations.

@@ -42,11 +42,14 @@ class EntryRepository @Inject constructor(
         entries.observeDatesInRange(from.toEpochDay(), to.toEpochDay())
             .map { days -> days.mapTo(HashSet()) { LocalDate.ofEpochDay(it) } }
 
-    /** Entries matching the words in [text], optionally limited to one [tag]; newest first. */
+    /**
+     * Entries whose words match [text], or whose tags start with it, optionally limited to one [tag];
+     * newest first.
+     */
     fun search(text: String, tag: String?): Flow<List<Entry>> {
         val match = SearchQuery.toMatch(text)
         val source = when {
-            match != null -> entries.search(match, tag)
+            match != null -> entries.search(match, SearchQuery.likePrefix(text), tag)
             tag != null -> entries.withTag(tag)
             else -> return flowOf(emptyList())
         }

@@ -54,6 +54,10 @@ cc.toolcrate.lyceum
 - `./gradlew assembleDebug` **must pass before every commit**; run the unit tests too.
 - Data-layer tests use Robolectric with an in-memory Room database (`app/src/test`).
 - `ui/RenderTest` draws real screens in light and dark to `app/build/screens/`; look at them after UI changes.
+- `tools/verify_quotes.py` checks every quotation word for word against Rackham's text (CI runs it);
+  run it after touching `quotes/Quotes.kt`.
+- Play Store graphics: `./gradlew testDebugUnitTest -Pstore=true` draws them to `app/build/store/`.
+- Release: see `docs/play-store/RELEASE.md`. CI versionCode is 1000 + run number.
 - Builds fetch from Google's Maven Central mirror first (see `settings.gradle.kts`); Robolectric uses it too.
 - Commit after each milestone with a plain, descriptive message. Never put model names or identifiers in
   commits, code or docs.
