@@ -73,10 +73,13 @@ object Routes {
 fun LyceumApp(
     openToday: StateFlow<Boolean> = MutableStateFlow(false),
     onOpenedToday: () -> Unit = {},
+    today: StateFlow<LocalDate> = MutableStateFlow(LocalDate.now()),
     nav: NavHostController = rememberNavController(),
     links: StagiraLinks = hiltViewModel(),
 ) {
     val goToday by openToday.collectAsStateWithLifecycle()
+    // Screens that depend on the date get fresh view models when the day changes.
+    val day by today.collectAsStateWithLifecycle()
     val stagiraOn by links.enabled.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(goToday) {
@@ -102,17 +105,23 @@ fun LyceumApp(
     ) { padding ->
         NavHost(nav, startDestination = Tab.Today.route, modifier = Modifier.padding(padding)) {
             composable(Tab.Today.route) {
-                EditorScreen(onBack = null, onOpenSettings = { nav.navigate(Routes.SETTINGS) }, goalSlot = goalSlot)
+                EditorScreen(
+                    onBack = null, onOpenSettings = { nav.navigate(Routes.SETTINGS) }, goalSlot = goalSlot,
+                    viewModel = hiltViewModel(key = "today-$day"),
+                )
             }
             composable(Tab.Journal.route) {
                 JournalScreen(
                     onOpen = { nav.navigate(Routes.entry(it)) },
                     onWrite = { nav.navigate(Routes.edit(it)) },
                     onOpenSettings = { nav.navigate(Routes.SETTINGS) },
+                    viewModel = hiltViewModel(key = "journal-$day"),
                 )
             }
             composable(Tab.Search.route) { SearchScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
-            composable(Tab.Week.route) { WeekScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
+            composable(Tab.Week.route) {
+                WeekScreen(onOpen = { nav.navigate(Routes.entry(it)) }, viewModel = hiltViewModel(key = "week-$day"))
+            }
             dated(Routes.ENTRY) {
                 EntryScreen(onBack = { nav.popBackStack() }, onEdit = { nav.navigate(Routes.edit(it)) }, onOpenGoal = openGoal)
             }

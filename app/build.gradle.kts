@@ -49,6 +49,10 @@ android {
         buildConfig = true
     }
 
+    // Exported Room schemas, so migration tests (Robolectric reads the app's merged assets) can build
+    // each old version of the database. Debug builds only; release APKs don't carry them.
+    sourceSets.getByName("debug").assets.srcDir("$projectDir/schemas")
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.all {

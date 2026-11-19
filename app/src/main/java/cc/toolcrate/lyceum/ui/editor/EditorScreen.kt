@@ -30,6 +30,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.activity.compose.BackHandler
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,11 +70,15 @@ fun EditorScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val known by viewModel.knownTags.collectAsStateWithLifecycle()
     val paper = LyceumTheme.paper
+    var confirmLeave by remember { mutableStateOf(false) }
+    // Leaving a past page with changes not yet saved asks first; Today keeps its draft while you look around.
+    val back: (() -> Unit)? = onBack?.let { leave -> { if (state.dirty) confirmLeave = true else leave() } }
+    BackHandler(enabled = onBack != null && state.dirty) { confirmLeave = true }
 
     Column(Modifier.fillMaxSize()) {
         LyceumTopBar(
             title = if (onBack == null) "Today" else "Edit page",
-            onBack = onBack,
+            onBack = back,
             actions = {
                 if (onBack == null) IconButton(onClick = onOpenSettings) { Icon(Icons.Outlined.Settings, "Settings") }
             },
@@ -130,13 +140,23 @@ fun EditorScreen(
                     enabled = state.canSave && (state.dirty || !state.existing),
                     colors = ButtonDefaults.buttonColors(containerColor = paper.ink, contentColor = paper.page),
                 ) { Text(if (state.existing) "Save changes" else "Save") }
-                Gap(0)
                 if (state.existing && !state.dirty) {
-                    Text("  Saved.", style = MaterialTheme.typography.bodyMedium, color = paper.muted)
+                    Text("Saved.", Modifier.padding(start = 16.dp), style = MaterialTheme.typography.bodyMedium, color = paper.muted)
                 }
             }
             Gap(40)
         }
+    }
+
+    if (confirmLeave && onBack != null) {
+        AlertDialog(
+            onDismissRequest = { confirmLeave = false },
+            title = { Text("Leave without saving?") },
+            text = { Text("Your changes to this page haven't been saved.") },
+            confirmButton = { TextButton(onClick = { confirmLeave = false; onBack() }) { Text("Leave") } },
+            dismissButton = { TextButton(onClick = { confirmLeave = false }) { Text("Keep writing") } },
+            containerColor = paper.card,
+        )
     }
 
     state.quote?.let { quote ->

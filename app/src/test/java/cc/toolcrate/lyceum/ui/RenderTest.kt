@@ -29,6 +29,18 @@ import cc.toolcrate.lyceum.ui.theme.ThemeMode
 import cc.toolcrate.lyceum.ui.week.WeekScreen
 import cc.toolcrate.lyceum.ui.week.WeekViewModel
 import kotlinx.coroutines.runBlocking
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import cc.toolcrate.lyceum.data.settings.SettingsStore
+import cc.toolcrate.lyceum.domain.QuoteChooser
+import cc.toolcrate.lyceum.security.AppLock
+import cc.toolcrate.lyceum.ui.editor.QuoteContent
+import cc.toolcrate.lyceum.ui.entry.EntryScreen
+import cc.toolcrate.lyceum.ui.entry.EntryViewModel
+import cc.toolcrate.lyceum.ui.lock.LockScreen
+import cc.toolcrate.lyceum.ui.prompts.PromptsScreen
+import cc.toolcrate.lyceum.ui.prompts.PromptsViewModel
+import cc.toolcrate.lyceum.ui.search.SearchScreen
+import cc.toolcrate.lyceum.ui.search.SearchViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -84,7 +96,8 @@ class RenderTest : DbTest() {
         // Flows start once the screen subscribes; give Room's threads a moment, frame by frame.
         repeat(30) {
             compose.mainClock.advanceTimeBy(100)
-            shadowOf(Looper.getMainLooper()).idle()
+            // Also move the looper's own clock, so delays in view models (search's debounce) run.
+            shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofMillis(100))
             Thread.sleep(20)
         }
         val view = compose.activity.window.decorView
@@ -126,5 +139,41 @@ class RenderTest : DbTest() {
         val (entries, _) = seed()
         shoot("week-dark", ThemeMode.Dark) { WeekScreen(onOpen = {}, viewModel = WeekViewModel(entries, clock)) }
         compose.onNodeWithText("What you learned".uppercase()).assertExists()
+    }
+
+    @Test
+    fun entryLight() {
+        val (entries, _) = seed()
+        val vm = EntryViewModel(SavedStateHandle(mapOf("date" to today.minusDays(3).toString())), entries, clock)
+        shoot("entry-light", ThemeMode.Light) { EntryScreen(onBack = {}, onEdit = {}, viewModel = vm) }
+    }
+
+    @Test
+    fun searchDark() {
+        val (entries, _) = seed()
+        val vm = SearchViewModel(entries, clock).apply { setQuery("walk") }
+        shoot("search-dark", ThemeMode.Dark) { SearchScreen(onOpen = {}, viewModel = vm) }
+        compose.onNodeWithText("Learned: Walking first makes the day kinder").assertExists()
+    }
+
+    @Test
+    fun promptsLight() {
+        val (_, prompts) = seed()
+        shoot("prompts-light", ThemeMode.Light) { PromptsScreen(onBack = {}, viewModel = PromptsViewModel(prompts)) }
+    }
+
+    @Test
+    fun quoteSheetLight() {
+        val quote = QuoteChooser.choose(Entry(today, "", "Said no to the extra shift.", Mood.Even))
+        // The sheet is its own window; its content is drawn here on a card, as the sheet shows it.
+        shoot("quote-light", ThemeMode.Light) {
+            Box(Modifier.fillMaxSize().background(LyceumTheme.paper.card)) { QuoteContent(quote) {} }
+        }
+    }
+
+    @Test
+    fun lockDark() {
+        val store = SettingsStore(PreferenceDataStoreFactory.create { File.createTempFile("s", ".preferences_pb").also { it.delete() } })
+        shoot("lock-dark", ThemeMode.Dark) { LockScreen(AppLock(store, clock), biometric = false) }
     }
 }

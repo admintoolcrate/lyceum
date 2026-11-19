@@ -32,19 +32,26 @@ fun QuoteSheet(quote: Quote, onDismiss: () -> Unit) {
         contentColor = paper.ink,
         tonalElevation = 0.dp,
     ) {
-        Column(
-            Modifier.fillMaxWidth().padding(horizontal = PagePadding).padding(bottom = 16.dp).navigationBarsPadding(),
-        ) {
-            Text("Saved.", style = MaterialTheme.typography.labelMedium, color = paper.muted)
-            Gap(16)
-            Text("“${quote.text}”", style = QuoteStyle, color = paper.ink)
-            Gap(12)
-            Text(quote.citation, style = MaterialTheme.typography.bodySmall, color = paper.muted)
-            Text("tr. H. Rackham", style = MaterialTheme.typography.bodySmall, color = paper.muted)
-            Gap(16)
-            TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
-                Text("Close", color = paper.accent)
-            }
+        QuoteContent(quote, onDismiss)
+    }
+}
+
+/** The passage itself, apart from the sheet that holds it (so it can be drawn on its own). */
+@Composable
+fun QuoteContent(quote: Quote, onDismiss: () -> Unit) {
+    val paper = LyceumTheme.paper
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = PagePadding).padding(bottom = 16.dp).navigationBarsPadding(),
+    ) {
+        Text("Saved.", style = MaterialTheme.typography.labelMedium, color = paper.muted)
+        Gap(16)
+        Text("“${quote.text}”", style = QuoteStyle, color = paper.ink)
+        Gap(12)
+        Text(quote.citation, style = MaterialTheme.typography.bodySmall, color = paper.muted)
+        Text("tr. H. Rackham", style = MaterialTheme.typography.bodySmall, color = paper.muted)
+        Gap(16)
+        TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
+            Text("Close", color = paper.accent)
         }
     }
 }

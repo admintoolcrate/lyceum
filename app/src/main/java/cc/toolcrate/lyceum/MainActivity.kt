@@ -54,7 +54,7 @@ class MainActivity : FragmentActivity() {
                     // Settings not read yet: show only the page colour, never a flash of the journal.
                     s == null -> Box(Modifier.fillMaxSize().background(LyceumTheme.paper.page))
                     lockOn && locked -> LockScreen(main.lock, biometric = s.biometricEnabled)
-                    else -> LyceumApp(openToday = main.openToday, onOpenedToday = main::openedToday)
+                    else -> LyceumApp(openToday = main.openToday, onOpenedToday = main::openedToday, today = main.today)
                 }
             }
         }

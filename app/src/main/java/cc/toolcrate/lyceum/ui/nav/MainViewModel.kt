@@ -9,6 +9,8 @@ import cc.toolcrate.lyceum.security.AppLock
 import cc.toolcrate.lyceum.domain.GoalRef
 import cc.toolcrate.lyceum.stagira.PendingGoal
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.Clock
+import java.time.LocalDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,11 @@ class MainViewModel @Inject constructor(
     prompts: PromptRepository,
     val lock: AppLock,
     private val pendingGoal: PendingGoal,
+    private val clock: Clock,
 ) : ViewModel() {
+    /** The calendar day, checked each time the app comes back, so Today rolls over after midnight. */
+    val today = MutableStateFlow(LocalDate.now(clock))
+
     /** Set when something outside (Stagira) asked for today's page. */
     val openToday = MutableStateFlow(false)
 
@@ -45,5 +51,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun onBackground() = lock.onBackground()
-    fun onForeground() = viewModelScope.launch { lock.onForeground() }
+    fun onForeground() = viewModelScope.launch {
+        today.value = LocalDate.now(clock)
+        lock.onForeground()
+    }
 }
