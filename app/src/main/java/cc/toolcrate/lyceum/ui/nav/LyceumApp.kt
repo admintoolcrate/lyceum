@@ -1,8 +1,6 @@
 package cc.toolcrate.lyceum.ui.nav
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
@@ -10,7 +8,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -18,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -34,6 +30,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import cc.toolcrate.lyceum.ui.components.Hairline
 import cc.toolcrate.lyceum.ui.editor.EditorScreen
+import cc.toolcrate.lyceum.ui.entry.EntryScreen
+import cc.toolcrate.lyceum.ui.journal.JournalScreen
+import cc.toolcrate.lyceum.ui.search.SearchScreen
+import cc.toolcrate.lyceum.ui.week.WeekScreen
 import cc.toolcrate.lyceum.ui.prompts.PromptsScreen
 import cc.toolcrate.lyceum.ui.settings.AboutScreen
 import cc.toolcrate.lyceum.ui.settings.SettingsScreen
@@ -72,9 +72,18 @@ fun LyceumApp(nav: NavHostController = rememberNavController()) {
             composable(Tab.Today.route) {
                 EditorScreen(onBack = null, onOpenSettings = { nav.navigate(Routes.SETTINGS) })
             }
-            composable(Tab.Journal.route) { Placeholder("Journal") }
-            composable(Tab.Search.route) { Placeholder("Search") }
-            composable(Tab.Week.route) { Placeholder("Week") }
+            composable(Tab.Journal.route) {
+                JournalScreen(
+                    onOpen = { nav.navigate(Routes.entry(it)) },
+                    onWrite = { nav.navigate(Routes.edit(it)) },
+                    onOpenSettings = { nav.navigate(Routes.SETTINGS) },
+                )
+            }
+            composable(Tab.Search.route) { SearchScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
+            composable(Tab.Week.route) { WeekScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
+            dated(Routes.ENTRY) {
+                EntryScreen(onBack = { nav.popBackStack() }, onEdit = { nav.navigate(Routes.edit(it)) })
+            }
             dated(Routes.EDIT) {
                 EditorScreen(onBack = { nav.popBackStack() }, onOpenSettings = {})
             }
@@ -122,12 +131,5 @@ private fun BottomBar(nav: NavHostController, routes: Set<String>) {
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun Placeholder(title: String) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(title, style = MaterialTheme.typography.headlineMedium)
     }
 }
