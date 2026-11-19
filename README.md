@@ -13,6 +13,12 @@ After you save, a short passage from Aristotle chosen to suit the day.
 - Optional passphrase-encrypted backup to your own Google Drive (hidden app folder).
 - Optional link to a goal in [Stagira](https://github.com/admintoolcrate/Stagira).
 
+<p>
+  <img src="docs/screens/today-light.png" width="200" alt="Today, light">
+  <img src="docs/screens/journal-light.png" width="200" alt="Journal calendar, light">
+  <img src="docs/screens/week-dark.png" width="200" alt="Weekly review, dark">
+</p>
+
 ## Building
 
 Requires JDK 17+ and the Android SDK (platform 36).
@@ -25,4 +31,11 @@ Requires JDK 17+ and the Android SDK (platform 36).
 ./gradlew testDebugUnitTest
 ```
 
-See `CLAUDE.md` for project conventions and `third_party/README.md` for bundled fonts and texts.
+`RenderTest` draws the real screens, light and dark, into `app/build/screens/`; `docs/screens/` holds copies.
+
+## Docs
+
+- `CLAUDE.md`: project conventions.
+- `docs/drive-setup.md`: registering the Google OAuth client for the optional Drive backup.
+- `docs/stagira-intent.md`: the intent contract with Stagira.
+- `third_party/README.md`: bundled fonts and the source of the quotations.

@@ -33,7 +33,7 @@ cc.toolcrate.lyceum
   reminder       evening reminder (WorkManager)
   security       app lock: PIN hashing, backoff, biometric
   backup         JSON export/import, encryption envelope, Drive
-  stagira        intent contract with the Stagira app
+  stagira        intent contract with the Stagira app (docs/stagira-intent.md)
   ui/theme       palette, type, shapes
   ui/<screen>    Screen.kt + ViewModel.kt per screen
   di             Hilt modules
@@ -46,12 +46,15 @@ cc.toolcrate.lyceum
 - Room schemas are exported to `app/schemas/`; commit them. Every schema change bumps the version and
   adds a real `Migration` with a test. **Never** use `fallbackToDestructiveMigration`; these are people's journals.
 - One entry per calendar day (`entries.date` is a unique epoch day).
+- Import and restore merge day by day: the page with the newer `updatedAt` wins. Nothing local is deleted.
 - The JSON export format (`backup/JournalCodec`) is versioned; keep reading every older version.
 
 ## Build, test, commit
 - Build: `./gradlew assembleDebug`. Tests: `./gradlew testDebugUnitTest`.
 - `./gradlew assembleDebug` **must pass before every commit**; run the unit tests too.
 - Data-layer tests use Robolectric with an in-memory Room database (`app/src/test`).
+- `ui/RenderTest` draws real screens in light and dark to `app/build/screens/`; look at them after UI changes.
+- Builds fetch from Google's Maven Central mirror first (see `settings.gradle.kts`); Robolectric uses it too.
 - Commit after each milestone with a plain, descriptive message. Never put model names or identifiers in
   commits, code or docs.
 - `local.properties` (SDK path) and signing files are never committed.

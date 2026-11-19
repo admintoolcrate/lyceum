@@ -15,6 +15,9 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import cc.toolcrate.lyceum.stagira.StagiraContract
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -37,6 +40,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val message by viewModel.message.collectAsStateWithLifecycle()
     message?.let { text ->
         AlertDialog(
@@ -83,6 +87,15 @@ fun SettingsScreen(
             Gap(8)
             BackupSection()
             Hairline()
+            if (remember { StagiraContract.canPick(context) }) {
+                SettingSwitch(
+                    "Stagira goals",
+                    "Link a page to one of your Stagira goals. Only the goal's name and id are kept with the page.",
+                    settings.stagiraLinkEnabled,
+                    viewModel::setStagiraLink,
+                )
+                Hairline()
+            }
             SettingRow("About", "Principles, fonts and the source of the quotations.", onClick = onOpenAbout)
             Gap(40)
         }

@@ -3,6 +3,7 @@ package cc.toolcrate.lyceum.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
@@ -54,8 +55,10 @@ fun LyceumTheme(mode: ThemeMode = ThemeMode.System, content: @Composable () -> U
             colorScheme = paper.scheme(),
             typography = LyceumTypography,
             shapes = LyceumShapes,
-            content = content,
-        )
+        ) {
+            // Icons and text drawn outside a Surface use ink too, not Material's default black.
+            CompositionLocalProvider(LocalContentColor provides paper.ink, content = content)
+        }
     }
 }
 

@@ -72,4 +72,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun clearMessage() { message.value = null }
+
+    fun setStagiraLink(on: Boolean) = viewModelScope.launch { store.setStagiraLink(on) }
 }

@@ -1,5 +1,7 @@
 package cc.toolcrate.lyceum.ui.nav
 
+import cc.toolcrate.lyceum.stagira.StagiraLinks
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -39,6 +41,15 @@ import cc.toolcrate.lyceum.ui.settings.AboutScreen
 import cc.toolcrate.lyceum.ui.settings.SettingsScreen
 import cc.toolcrate.lyceum.ui.theme.LyceumTheme
 import java.time.LocalDate
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cc.toolcrate.lyceum.domain.GoalRef
+import cc.toolcrate.lyceum.stagira.StagiraContract
+import cc.toolcrate.lyceum.stagira.StagiraGoalSlot
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /** The four places on the bottom bar. */
 enum class Tab(val route: String, val label: String, val icon: ImageVector) {
@@ -59,7 +70,28 @@ object Routes {
 }
 
 @Composable
-fun LyceumApp(nav: NavHostController = rememberNavController()) {
+fun LyceumApp(
+    openToday: StateFlow<Boolean> = MutableStateFlow(false),
+    onOpenedToday: () -> Unit = {},
+    nav: NavHostController = rememberNavController(),
+    links: StagiraLinks = hiltViewModel(),
+) {
+    val goToday by openToday.collectAsStateWithLifecycle()
+    val stagiraOn by links.enabled.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    LaunchedEffect(goToday) {
+        if (goToday) {
+            nav.navigate(Tab.Today.route) {
+                popUpTo(nav.graph.findStartDestination().id) { inclusive = false }
+                launchSingleTop = true
+            }
+            onOpenedToday()
+        }
+    }
+    val goalSlot: @Composable (GoalRef?, (GoalRef?) -> Unit) -> Unit = { goal, onPick ->
+        StagiraGoalSlot(goal, onPick, enabled = stagiraOn, beforeLeaving = links::expectReturn)
+    }
+    val openGoal: ((GoalRef) -> Unit)? = if (stagiraOn) { goal -> links.expectReturn(); StagiraContract.view(context, goal) } else null
     val backStack by nav.currentBackStackEntryAsState()
     val current = backStack?.destination
     val onTab = Tab.entries.any { tab -> current?.hierarchy?.any { it.route == tab.route } == true }
@@ -70,7 +102,7 @@ fun LyceumApp(nav: NavHostController = rememberNavController()) {
     ) { padding ->
         NavHost(nav, startDestination = Tab.Today.route, modifier = Modifier.padding(padding)) {
             composable(Tab.Today.route) {
-                EditorScreen(onBack = null, onOpenSettings = { nav.navigate(Routes.SETTINGS) })
+                EditorScreen(onBack = null, onOpenSettings = { nav.navigate(Routes.SETTINGS) }, goalSlot = goalSlot)
             }
             composable(Tab.Journal.route) {
                 JournalScreen(
@@ -82,10 +114,10 @@ fun LyceumApp(nav: NavHostController = rememberNavController()) {
             composable(Tab.Search.route) { SearchScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
             composable(Tab.Week.route) { WeekScreen(onOpen = { nav.navigate(Routes.entry(it)) }) }
             dated(Routes.ENTRY) {
-                EntryScreen(onBack = { nav.popBackStack() }, onEdit = { nav.navigate(Routes.edit(it)) })
+                EntryScreen(onBack = { nav.popBackStack() }, onEdit = { nav.navigate(Routes.edit(it)) }, onOpenGoal = openGoal)
             }
             dated(Routes.EDIT) {
-                EditorScreen(onBack = { nav.popBackStack() }, onOpenSettings = {})
+                EditorScreen(onBack = { nav.popBackStack() }, onOpenSettings = {}, goalSlot = goalSlot)
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen(
