@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -35,6 +37,15 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val message by viewModel.message.collectAsStateWithLifecycle()
+    message?.let { text ->
+        AlertDialog(
+            onDismissRequest = viewModel::clearMessage,
+            text = { Text(text, style = MaterialTheme.typography.bodyLarge) },
+            confirmButton = { TextButton(onClick = viewModel::clearMessage) { Text("OK") } },
+            containerColor = LyceumTheme.paper.card,
+        )
+    }
     Column(Modifier.fillMaxSize()) {
         LyceumTopBar("Settings", onBack = onBack)
         PageColumn {
@@ -62,6 +73,10 @@ fun SettingsScreen(
                 onBiometric = viewModel::setBiometric,
                 launch = viewModel::launch,
             )
+            Hairline()
+            Gap(12)
+            SectionLabel("Your pages")
+            DataSection(onBeforePicker = viewModel::expectReturn, onExport = viewModel::export, onImport = viewModel::import)
             Hairline()
             SettingRow("About", "Principles, fonts and the source of the quotations.", onClick = onOpenAbout)
             Gap(40)
