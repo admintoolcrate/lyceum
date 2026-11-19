@@ -3,7 +3,6 @@ package cc.toolcrate.lyceum.ui.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,17 +27,11 @@ import cc.toolcrate.lyceum.ui.components.SectionLabel
 import cc.toolcrate.lyceum.ui.theme.LyceumTheme
 import cc.toolcrate.lyceum.ui.theme.ThemeMode
 
-/** Where each later section of Settings plugs in. Sections are added as features land. */
-data class SettingsSections(
-    val extra: @Composable ColumnScope.() -> Unit = {},
-)
-
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPrompts: () -> Unit,
     onOpenAbout: () -> Unit,
-    sections: SettingsSections = SettingsSections(),
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -56,7 +49,10 @@ fun SettingsScreen(
             Hairline()
             SettingRow("Prompts", "Edit, reorder or switch off the daily prompts.", onClick = onOpenPrompts)
             Hairline()
-            sections.extra(this)
+            Gap(12)
+            SectionLabel("Reminder")
+            ReminderSection(settings) { on, time -> viewModel.setReminder(on, time) }
+            Hairline()
             SettingRow("About", "Principles, fonts and the source of the quotations.", onClick = onOpenAbout)
             Gap(40)
         }
