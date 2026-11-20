@@ -175,33 +175,6 @@ class StoreGraphics : DbTest() {
         shoot("5-search") { SearchScreen(onOpen = {}, viewModel = vm) }
     }
 
-    @Test
-    @Config(qualifiers = "w512dp-h512dp-mdpi")
-    fun icon512() = shoot("icon-512") {
-        Box(Modifier.fillMaxSize().background(LyceumTheme.paper.page), contentAlignment = Alignment.Center) {
-            // The adaptive icon's foreground is drawn on a 108-unit canvas; show its safe zone large.
-            // requiredSize lets the 108-unit canvas overflow the 512 box, so the book itself fills ~70%.
-            Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.requiredSize(860.dp))
-        }
-    }
-
-    @Test
-    @Config(qualifiers = "w1024dp-h500dp-mdpi")
-    fun featureGraphic() = shoot("feature-graphic-1024x500") {
-        val paper = LyceumTheme.paper
-        Row(Modifier.fillMaxSize().padding(horizontal = 72.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.size(300.dp))
-            Spacer(Modifier.width(24.dp))
-            Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Text("Lyceum", style = TextStyle(fontFamily = Garamond, fontSize = 92.sp), color = paper.ink)
-                Text("A quiet daily reflection journal", style = TextStyle(fontFamily = Inter, fontSize = 26.sp), color = paper.muted)
-                Spacer(Modifier.size(28.dp))
-                Text(
-                    "“…one swallow does not make spring,\nnor does one fine day…”",
-                    style = TextStyle(fontFamily = Garamond, fontStyle = FontStyle.Italic, fontSize = 28.sp, lineHeight = 36.sp),
-                    color = paper.accent,
-                )
-            }
-        }
-    }
+    // The Play icon and feature graphic are drawn by tools/family_graphics.py, shared by all
+    // four ToolCrate apps (docs/family-look.md), so they match Stagira's exactly.
 }

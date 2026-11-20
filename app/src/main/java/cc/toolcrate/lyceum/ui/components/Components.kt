@@ -1,5 +1,6 @@
 package cc.toolcrate.lyceum.ui.components
 
+import cc.toolcrate.lyceum.ui.theme.ScreenTitle
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +50,7 @@ fun LyceumTopBar(
     val paper = LyceumTheme.paper
     Column {
         TopAppBar(
-            title = { Text(title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            title = { Text(title, style = ScreenTitle, maxLines = 1, overflow = TextOverflow.Ellipsis) },
             navigationIcon = {
                 if (onBack != null) {
                     IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back") }

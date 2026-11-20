@@ -20,7 +20,7 @@ private fun Paper.scheme(): ColorScheme {
     return base.copy(
         primary = accent, onPrimary = page,
         primaryContainer = accentSoft, onPrimaryContainer = ink,
-        secondary = muted, onSecondary = page,
+        secondary = ink, onSecondary = page,
         secondaryContainer = accentSoft, onSecondaryContainer = ink,
         tertiary = accent, onTertiary = page,
         background = page, onBackground = ink,
@@ -29,17 +29,18 @@ private fun Paper.scheme(): ColorScheme {
         surfaceContainerLowest = page, surfaceContainerLow = card,
         surfaceContainer = card, surfaceContainerHigh = card, surfaceContainerHighest = accentSoft,
         surfaceTint = page,
-        outline = hairline, outlineVariant = hairline,
+        outline = muted, outlineVariant = hairline,
         inverseSurface = ink, inverseOnSurface = page,
     )
 }
 
+/** Family shapes (docs/family-look.md): Material's small parts, 24 dp cards, 28 dp sheets. */
 private val LyceumShapes = Shapes(
     extraSmall = RoundedCornerShape(4.dp),
-    small = RoundedCornerShape(6.dp),
-    medium = RoundedCornerShape(10.dp),
-    large = RoundedCornerShape(14.dp),
-    extraLarge = RoundedCornerShape(20.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(24.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(28.dp),
 )
 
 @Composable

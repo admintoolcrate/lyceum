@@ -4,7 +4,7 @@ Play Console → Grow → Store presence → Main store listing.
 
 **App name** (30 characters max)
 
-> Lyceum: Daily Journal
+> Lyceum – Daily Journal
 
 **Short description** (80 characters max)
 

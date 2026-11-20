@@ -13,10 +13,15 @@ Lyceum is a quiet daily reflection journal for Android. These rules hold for eve
 - Out of scope: social features, AI analysis, cloud accounts.
 
 ## Look
-- Paper palette in `ui/theme/Color.kt` (`PaperLight`, `PaperDark`). Use `LyceumTheme.paper` tokens
-  (`page`, `card`, `ink`, `muted`, `hairline`, `accent`, `accentSoft`). Never hard-code colours in screens.
-- EB Garamond (`Garamond`) for headings, dates, prompts and quotations; Inter (`Inter`) for body and labels.
-- Hairline dividers instead of shadows, no tonal elevation, generous margins (24 dp page padding).
+- Lyceum follows the ToolCrate family look shared with Stagira, Telos and Kairos:
+  **read `docs/family-look.md`** (the same file in all four repos; change it in all four).
+- Mono palette in `ui/theme/Color.kt` (`PaperLight`, `PaperDark`: black on white, true black at night;
+  `accent` is ink). Use `LyceumTheme.paper` tokens (`page`, `card`, `ink`, `muted`, `hairline`, `accent`,
+  `accentSoft`). Never hard-code colours in screens.
+- EB Garamond (`Garamond`) for display moments only: the name, prompts, quotations and `ScreenTitle`;
+  Inter (`Inter`) for everything else, including dates and headlines.
+- Hairline dividers instead of shadows, no tonal elevation, generous margins (24 dp page padding),
+  24 dp cards, pill buttons.
 - Both light and dark must look right; check both when adding UI.
 
 ## Stack and layout
@@ -56,7 +61,8 @@ cc.toolcrate.lyceum
 - `ui/RenderTest` draws real screens in light and dark to `app/build/screens/`; look at them after UI changes.
 - `tools/verify_quotes.py` checks every quotation word for word against Rackham's text (CI runs it);
   run it after touching `quotes/Quotes.kt`.
-- Play Store graphics: `./gradlew testDebugUnitTest -Pstore=true` draws them to `app/build/store/`.
+- Play Store screenshots: `./gradlew testDebugUnitTest -Pstore=true` draws them to `app/build/store/`.
+  The Play icon and feature graphic come from `tools/family_graphics.py` (see docs/family-look.md).
 - Release: see `docs/play-store/RELEASE.md`. CI versionCode is 1000 + run number.
 - Builds fetch from Google's Maven Central mirror first (see `settings.gradle.kts`); Robolectric uses it too.
 - Commit after each milestone with a plain, descriptive message. Never put model names or identifiers in
