@@ -15,4 +15,4 @@ After you save, a short passage from Aristotle, chosen to suit the day.
 - An optional gentle evening reminder.
 - App lock, export to a file, and an optional encrypted backup to your own Google Drive.
 
-[Privacy policy](privacy/)
+[Privacy policy](privacy/) · [Delete your data](delete-data/)
