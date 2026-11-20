@@ -27,9 +27,11 @@ Lyceum opens today's page with the goal linked, **unsaved**. The user writes and
 If the app lock is on, the lock screen comes first. Bad extras (blank, too long, control characters)
 are ignored.
 
-## What Stagira would add (not built yet)
+## What Stagira provides
 
-- An exported activity for `PICK_GOAL` that lists goals and returns the chosen one. It should leave
-  out private goals, or return only their cover names.
-- An exported activity, or an intent filter on the main one, for `VIEW_GOAL` that opens the goal page.
-- Optionally, a "Write about this in Lyceum" action that sends `NEW_ENTRY`.
+Built in Stagira (its `docs/intents.md` and `intake/GoalLinks.kt`):
+
+- `PICK_GOAL`: an exported screen listing the person's goals. It returns the chosen goal's id and
+  its title as shown, so a private goal gives only its cover name. It respects Stagira's app lock.
+- `VIEW_GOAL`: opens the goal's page behind Stagira's own lock (an unknown id opens the ledger).
+- Not built yet: a "Write about this in Lyceum" action in Stagira that sends `NEW_ENTRY`.
