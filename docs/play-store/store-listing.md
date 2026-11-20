@@ -22,7 +22,7 @@ Play Console → Grow → Store presence → Main store listing.
 > CALM BY DESIGN
 > • No streaks, no badges, no scores, no guilt
 > • An optional evening reminder that stays quiet once you've written, and never mentions missed days
-> • A warm paper look, in light and dark
+> • A plain black-on-white page, and true black at night
 >
 > FIND YOUR WAY BACK
 > • A calendar of the days you wrote
