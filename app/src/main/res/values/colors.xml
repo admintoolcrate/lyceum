@@ -1,0 +1,7 @@
+<resources>
+    <color name="paper">#FFFFFFFF</color>
+    <color name="ink">#FF111111</color>
+    <color name="page_dark">#FF000000</color>
+    <!-- Launcher ground: the family mark is white on ink. -->
+    <color name="launcher_background">#111111</color>
+</resources>
