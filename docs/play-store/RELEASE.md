@@ -74,15 +74,15 @@ Copy from [`store-listing.md`](store-listing.md). Graphics are in `graphics/` an
 
 ## 6. Host the privacy policy (you)
 
-The repo's `docs/` folder is a small GitHub Pages site:
+`docs/` is the Lyceum website (lyceum.toolcrate.cc), which also carries the policy:
 
 1. On GitHub, open **Settings → Pages**, set Source to **Deploy from a branch**, choose branch `main`
    and folder **/docs**, then **Save**. (Merge this branch into `main` first.)
-2. The policy appears at `https://admintoolcrate.github.io/lyceum/privacy/`. GitHub Pages on a
+2. The policy appears at `https://lyceum.toolcrate.cc/privacy/`. GitHub Pages on a
    private repository needs a paid GitHub plan; otherwise make the repo public, or paste the policy
    into a Google Sites page.
-3. Optional: to use `lyceum.toolcrate.cc` as Stagira does, add a `docs/CNAME` file with that name
-   and a DNS `CNAME` record pointing to `admintoolcrate.github.io`.
+3. At the DNS provider for toolcrate.cc, add a `CNAME` record: `lyceum` → `admintoolcrate.github.io`
+   (`docs/CNAME` already names the domain). Once it resolves, tick **Enforce HTTPS** under Pages.
 
 ## 7. Google sign-in for Drive backup (you)
 

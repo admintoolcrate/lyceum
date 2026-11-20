@@ -1,0 +1,191 @@
+---
+title: Lyceum
+body_class: home
+description: Lyceum is a quiet daily reflection journal for Android. One short prompt a day, a few lines, and a passage from Aristotle when you save. No streaks, no ads, no account; your pages stay on your phone.
+---
+<section class="hero">
+  <div class="hero-mark" aria-hidden="true">
+    <svg viewBox="26 26 56 56"><path stroke-width=".6" d="M54 44C47 39 39 38 32 39v29c7-1 15 0 22 5 7-5 15-6 22-5V39c-7-1-15 0-22 5zm0 0v29"/><path stroke-width=".4" d="M38 47c4-.5 8 0 11 1.5M38 53c4-.5 8 0 11 1.5m10-6c3-1.5 7-2 11-1.5m-11 7.5c3-1.5 7-2 11-1.5"/></svg>
+  </div>
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span>The Daily Journal · for Android</p>
+    <h1>One quiet page <em>a day.</em></h1>
+    <p class="lede">One short prompt each day. Write a few lines, add a mood if you like, and one thing you learned. When you save, a short passage from Aristotle, chosen to suit the day.</p>
+    <div class="cta">
+      <span class="btn btn-solid" aria-disabled="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 3.5v17l9-8.5-9-8.5zm10.4 9.9 2.3 2.2-9.8 5.6 7.5-7.8zm0-2.8L6.9 2.8l9.8 5.6-2.3 2.2zm3.4 4.4-2.6-2.5 2.6-2.5 3 1.7c.9.5.9 1.1 0 1.6l-3 1.7z" fill="currentColor"/></svg>
+        <span><small>Coming soon to</small>Google Play</span>
+      </span>
+      <a class="btn btn-line" href="#how">See how it works →</a>
+    </div>
+    <ul class="ticks" aria-label="In short">
+      <li>Free, all of it</li><li>No ads</li><li>No streaks</li><li>No account</li>
+    </ul>
+  </div>
+
+  <div class="demo" aria-roledescription="carousel" aria-label="The app's screens">
+    <div class="phone">
+      <div class="screen">
+        <span class="status" aria-hidden="true"><i class="cam"></i></span>
+        <div class="slides" id="slides" tabindex="0" aria-live="polite">
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="1 of 5" data-name="Today" data-desc="One prompt, a few lines, a mood as a word and one thing you learned.">
+            <img src="{{ '/play-store/screenshots/1-today.png' | relative_url }}" alt="Lyceum's Today page: the prompt What took more courage than it looked?, a few lines in reply, the mood Good, and one thing learned." width="1080" height="1920">
+          </figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 of 5" data-name="After you save" data-desc="A short passage from Aristotle, chosen to suit the day.">
+            <img src="{{ '/play-store/screenshots/2-quote.png' | relative_url }}" alt="After saving: a passage from Aristotle's Nicomachean Ethics in a sheet over the page." width="1080" height="1920" loading="lazy">
+          </figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 of 5" data-name="Journal" data-desc="A calendar of the days you wrote, and the pages beneath it.">
+            <img src="{{ '/play-store/screenshots/3-journal.png' | relative_url }}" alt="The Journal: a month calendar with a dot under each day written, and recent pages below." width="1080" height="1920" loading="lazy">
+          </figure>
+          <figure class="slide dark" role="group" aria-roledescription="slide" aria-label="4 of 5" data-name="Week" data-desc="What you learned, how the days felt, and the threads running through them.">
+            <img src="{{ '/play-store/screenshots/4-week-dark.png' | relative_url }}" alt="The weekly review in dark mode: what you learned, how the days felt, threads and pages." width="1080" height="1920" loading="lazy">
+          </figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="5 of 5" data-name="Search" data-desc="Find any page by a word or a tag.">
+            <img src="{{ '/play-store/screenshots/5-search.png' | relative_url }}" alt="Search for walk: tags to choose from and two matching pages." width="1080" height="1920" loading="lazy">
+          </figure>
+        </div>
+        <i class="home-ind" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="controls">
+      <button type="button" class="arrow" id="prev" aria-label="Previous screen"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="dots" role="group" aria-label="Screens">
+        <button type="button" class="dot-btn" aria-label="Today" aria-current="true"></button>
+        <button type="button" class="dot-btn" aria-label="After you save"></button>
+        <button type="button" class="dot-btn" aria-label="Journal"></button>
+        <button type="button" class="dot-btn" aria-label="Week"></button>
+        <button type="button" class="dot-btn" aria-label="Search"></button>
+      </div>
+      <button type="button" class="arrow" id="next" aria-label="Next screen"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <p class="caption"><em id="caption-name">Today</em><span id="caption-desc">One prompt, a few lines, a mood as a word and one thing you learned.</span></p>
+  </div>
+</section>
+
+<section class="steps reveal" aria-labelledby="how">
+  <h2 id="how" class="label">How it works</h2>
+  <ol>
+    <li><span class="num">I</span><b>Read the prompt.</b> <span>One short, open question a day, such as “What did you enjoy for its own sake?”</span></li>
+    <li><span class="num">II</span><b>Write a few lines.</b> <span>As much or as little as you like. A mood as a word, never a score, and one thing you learned.</span></li>
+    <li><span class="num">III</span><b>Close the book.</b> <span>A passage from Aristotle to end on. Tomorrow's page waits, whenever you like.</span></li>
+  </ol>
+</section>
+
+<figure class="passage reveal">
+  <blockquote>…for no doubt the proper procedure is to begin by making a rough sketch, and to fill it in afterwards.</blockquote>
+  <figcaption><span><b>ARISTOTLE</b>Nicomachean Ethics I.7 · 1098a · tr. H. Rackham</span></figcaption>
+</figure>
+
+<section id="features" class="reveal" aria-labelledby="features-h">
+  <h2 id="features-h" class="label">What it does</h2>
+  <p class="section-lede">A few quiet minutes, and a way to find them again.</p>
+  <ul class="grid">
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9a3 3 0 1 1 4 2.8c-.6.3-1 .9-1 1.6V15M12 18.5v.5"/><circle cx="12" cy="12" r="9"/></svg>
+      <b>A prompt a day</b>
+      <span>Twelve short questions that take turns. Edit them, reorder them, switch some off, or write your own.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12c2.5-3 5.5-3 8 0s5.5 3 8 0"/></svg>
+      <b>Moods as words</b>
+      <span>Heavy, Low, Even, Good or Bright, if you want one. A word for the day, never a score or a chart.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.4 5.6L20 9.3l-4.3 3.9 1.2 5.8L12 16l-4.9 3 1.2-5.8L4 9.3l5.6-.7z"/></svg>
+      <b>One thing you learned</b>
+      <span>A single line, kept with the page and gathered in your weekly review.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h4v4H8c0 2 1 3 3 4M14 7h4v4h-3c0 2 1 3 3 4"/></svg>
+      <b>Aristotle, after you save</b>
+      <span>31 passages from the <i>Nicomachean Ethics</i> in Rackham's translation, each checked word for word, chosen to suit the day.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>
+      <b>A calendar</b>
+      <span>Each month, a small dot under every day you wrote. No counter, no chain to keep.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+      <b>Search and tags</b>
+      <span>Find any page by a word or a tag, across everything you've written.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h3"/></svg>
+      <b>A weekly review</b>
+      <span>What you learned, how the days felt, and the threads that ran through the week.</span>
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+      <b>A gentle evening reminder</b>
+      <span>Optional. One quiet nudge, only on days you haven't written yet, and never a word about missed days.</span>
+    </li>
+  </ul>
+</section>
+
+<section id="private" class="private reveal" aria-labelledby="private-h">
+  <div class="private-head">
+    <h2 id="private-h" class="label">Private by design</h2>
+    <p class="private-title">What you write is <em>for you alone.</em></p>
+    <p>No account, no analytics, no ads and no servers of our own. Your pages stay on your phone unless you export them or choose an encrypted backup.</p>
+    <a class="more" href="{{ '/privacy/' | relative_url }}">Read the privacy policy →</a>
+  </div>
+  <ul class="private-list">
+    <li><b>App lock</b><span>A PIN, or your fingerprint or face, when Lyceum opens and after half a minute away.</span></li>
+    <li><b>A plain export</b><span>Every page and prompt as plain JSON, saved wherever you choose. Import it again at any time.</span></li>
+    <li><b>Optional backup</b><span>To a hidden folder in your own Google Drive, sealed with a passphrase only you know. Weekly on Wi-Fi, or when you choose.</span></li>
+    <li><b>Nothing else leaves</b><span>Without the backup turned on, Lyceum never connects to anything at all.</span></li>
+  </ul>
+</section>
+
+<section id="faq" class="reveal" aria-labelledby="faq-h">
+  <h2 id="faq-h" class="label">Questions</h2>
+  <div class="faq">
+    <details>
+      <summary>Is it really free?</summary>
+      <p>Yes, every feature, for everyone. There are no ads or in-app purchases, and the app doesn't contain ad or payment code. If you'd like to help, you can <a href="{{ '/support/' | relative_url }}">support it on Ko-fi</a>.</p>
+    </details>
+    <details>
+      <summary>What if I don't write for a while?</summary>
+      <p>Nothing happens. There are no streaks to break and nothing counts the days you didn't write. Today's page is there whenever you like.</p>
+    </details>
+    <details>
+      <summary>Can I change the prompts?</summary>
+      <p>Yes. Edit them, put them in a different order, switch off the ones you'd rather not see, or write your own. You can bring back the originals at any time; your own prompts stay.</p>
+    </details>
+    <details>
+      <summary>Does it work with Stagira?</summary>
+      <p>If you use <a href="https://stagira.toolcrate.cc">Stagira</a>, the habit tracker, you can link a page to one of your Stagira goals. Only the goal's name and id are kept with the page, and nothing leaves your phone.</p>
+    </details>
+    <details>
+      <summary>Do I need an account? What if I change phones?</summary>
+      <p>No account needed. Restore your encrypted backup from your own Google Drive, or export a file and import it on the new phone. Where a day exists on both, the newer page is kept, and nothing on the phone is deleted.</p>
+    </details>
+    <details>
+      <summary>Is there an iPhone version?</summary>
+      <p>Not yet. Lyceum is Android-only for now (Android 8.0 and later), and it's coming to Google Play soon.</p>
+    </details>
+    <details>
+      <summary>Why “Lyceum”?</summary>
+      <p>The Lyceum was the school Aristotle founded in Athens, where he taught the ideas in the <i>Nicomachean Ethics</i>. Lyceum keeps a little of that company at the end of each day.</p>
+    </details>
+  </div>
+</section>
+
+<section class="family reveal" aria-labelledby="family-h">
+  <h2 id="family-h" class="label">The family</h2>
+  <p class="section-lede">Quiet, private tools from the same small workshop.</p>
+  <ul>
+    {%- for app in site.family %}{% unless app.name == site.title %}
+    <li><a href="{{ app.url }}"><img src="{{ '/assets/family/' | append: app.mark | append: '.svg' | relative_url }}" alt="" width="44" height="44"><span><b>{{ app.name }}</b><span>{{ app.line }}</span></span></a></li>
+    {%- endunless %}{% endfor %}
+  </ul>
+</section>
+
+<section class="closing reveal">
+  <p class="closing-title">A few lines <em>are plenty.</em></p>
+  <div class="cta">
+    <a class="btn btn-solid" href="#features">What it does</a>
+    <a class="btn btn-line" href="{{ '/support/' | relative_url }}">Support Lyceum</a>
+  </div>
+</section>

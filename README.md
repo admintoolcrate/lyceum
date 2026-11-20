@@ -2,6 +2,8 @@
 
 A quiet daily reflection journal for Android.
 
+Website: https://lyceum.toolcrate.cc (source in `docs/`).
+
 One short prompt a day. Write a few lines, note your mood if you like, and one thing you learned.
 After you save, a short passage from Aristotle chosen to suit the day.
 
